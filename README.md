@@ -30,8 +30,11 @@ erDiagram
 
 ## OpenAPI-like endpoints (MVP)
 - `GET /boards` (auth) — list boards available to current user.
-- `GET /boards/{board}` (auth, policy:view) — board detail with columns and tasks.
+- `GET /boards/{board}` (auth, policy:view) — board detail with columns/tasks and URL filters (`q`, `column_id`, `include_archived`).
 - `POST /tasks/{task}/move` (auth, policy:move) — body: `to_column_id: uuid`.
+- `POST /tasks/{task}/archive` / `POST /tasks/{task}/unarchive` (auth, policy:update).
+- `POST /tasks/{task}/attachments` (auth, policy:update, multipart upload).
+- `GET /attachments/{attachment}/download` (auth, policy:view).
 
 ## Setup
 ```bash
@@ -94,3 +97,9 @@ docker compose exec app php artisan migrate --seed
 - Added `Dockerfile` for reproducible PHP 8.3 + PostgreSQL runtime setup.
 - Added a dedicated `queue` container in `docker-compose.yml` for async processing.
 - Added activity logging for task moves in `activity_logs`.
+
+
+## Long-term production evolution (10-year view)
+- **Archive-first knowledge retention:** archived tasks remain searchable via URL filters (`include_archived=1&q=...`) so historical decisions (e.g., tool X vs Y) are discoverable years later.
+- **Change traceability:** task movement, archiving, and attachment uploads are auditable through activity logs.
+- **Documentation continuity:** files (procedures, photos, spreadsheets) stay linked to the task that introduced or changed process steps.
