@@ -6,6 +6,7 @@ use App\Http\Controllers\BoardManagementController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TaskArchiveController;
 use App\Http\Controllers\TaskAttachmentController;
+use App\Http\Controllers\TaskController;
 use App\Http\Controllers\TaskMoveController;
 use App\Http\Controllers\TeamController;
 use Illuminate\Support\Facades\Route;
@@ -23,6 +24,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/boards', [BoardManagementController::class, 'store'])->name('boards.store');
     Route::get('/boards/{board}', [BoardController::class, 'show'])->name('boards.show');
     Route::post('/boards/{board}/columns', [BoardColumnController::class, 'store'])->name('boards.columns.store');
+    Route::post('/boards/{board}/tasks', [TaskController::class, 'store'])->name('boards.tasks.store');
 
     Route::post('/teams', [TeamController::class, 'store'])->name('teams.store');
 

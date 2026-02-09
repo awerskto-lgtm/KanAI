@@ -6,7 +6,7 @@ Production-oriented multi-tenant Kanban MVP for manufacturing/corporate workflow
 - **Tenancy:** Organization -> Teams -> Boards. All task/board queries are scoped by organization membership.
 - **Management:** UI supports creating Teams, Boards, and custom intermediate board states (columns).
 - **RBAC:** Org roles (`org_admin`) + team roles (`manager`, `team_lead`, `member`, `viewer`) with policy enforcement.
-- **Kanban core:** Ordered columns with optional WIP limits, drag & drop movement, and controlled task move service.
+- **Kanban core:** Ordered columns with optional WIP limits, drag & drop movement, quick task creation, and controlled task move service.
 - **Auditability:** Every move writes `task_column_events` plus structured `activity_logs` records (actor, action, old/new values).
 - **Security:** Auth via Breeze, CSRF, validation, route authorization.
 
@@ -104,3 +104,10 @@ docker compose exec app php artisan migrate --seed
 - **Archive-first knowledge retention:** archived tasks remain searchable via URL filters (`include_archived=1&q=...`) so historical decisions (e.g., tool X vs Y) are discoverable years later.
 - **Change traceability:** task movement, archiving, and attachment uploads are auditable through activity logs.
 - **Documentation continuity:** files (procedures, photos, spreadsheets) stay linked to the task that introduced or changed process steps.
+
+
+## Added from common Kanban user needs
+- Quick task creation directly on board.
+- Personal focus filters: `mine`, `blocked`, `due_soon`.
+- Recent activity timeline panel for change visibility.
+- Office-style UI refinements (neutral palette, Segoe-like typography, compact cards/buttons).
