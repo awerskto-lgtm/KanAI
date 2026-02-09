@@ -18,6 +18,10 @@ class TaskMoveService
 
     public function move(Task $task, BoardColumn $targetColumn, User $actor): Task
     {
+        if ($task->isArchived()) {
+            throw new DomainException('Archived task cannot be moved.');
+        }
+
         if ($task->board_id !== $targetColumn->board_id) {
             throw new DomainException('Target column must belong to same board.');
         }
