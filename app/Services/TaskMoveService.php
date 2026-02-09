@@ -11,7 +11,10 @@ use DomainException;
 
 class TaskMoveService
 {
-    public function __construct(private readonly RbacService $rbac) {}
+    public function __construct(
+        private readonly RbacService $rbac,
+        private readonly ActivityLogService $activityLog,
+    ) {}
 
     public function move(Task $task, BoardColumn $targetColumn, User $actor): Task
     {
@@ -42,6 +45,16 @@ class TaskMoveService
             'moved_by' => $actor->id,
             'moved_at' => CarbonImmutable::now(),
         ]);
+
+        $this->activityLog->log(
+            $task->board->organization,
+            $actor,
+            'task.moved',
+            Task::class,
+            $task->id,
+            ['column_id' => $fromColumnId],
+            ['column_id' => $targetColumn->id],
+        );
 
         return $task->fresh();
     }

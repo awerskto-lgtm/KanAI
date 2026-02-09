@@ -6,7 +6,7 @@ Production-oriented multi-tenant Kanban MVP for manufacturing/corporate workflow
 - **Tenancy:** Organization -> Teams -> Boards. All task/board queries are scoped by organization membership.
 - **RBAC:** Org roles (`org_admin`) + team roles (`manager`, `team_lead`, `member`, `viewer`) with policy enforcement.
 - **Kanban core:** Ordered columns with optional WIP limits and controlled task move service.
-- **Auditability:** Every move writes `task_column_events`.
+- **Auditability:** Every move writes `task_column_events` plus structured `activity_logs` records (actor, action, old/new values).
 - **Security:** Auth via Breeze, CSRF, validation, route authorization.
 
 ## ERD (Mermaid)
@@ -60,11 +60,10 @@ QUEUE_CONNECTION=redis
 
 ## Docker
 ```bash
-docker compose up -d db redis
-composer install
-npm install
-php artisan migrate --seed
-php artisan serve --host=0.0.0.0 --port=8000
+docker compose up -d --build
+docker compose exec app composer install
+docker compose exec app npm install
+docker compose exec app php artisan migrate --seed
 ```
 
 ## Demo accounts
@@ -89,3 +88,9 @@ php artisan serve --host=0.0.0.0 --port=8000
 - Metrics API (lead/cycle/throughput/CFD)
 - Full audit log for all entities
 - 2FA enablement (Fortify/Jetstream feature flag)
+
+
+## Publish notes
+- Added `Dockerfile` for reproducible PHP 8.3 + PostgreSQL runtime setup.
+- Added a dedicated `queue` container in `docker-compose.yml` for async processing.
+- Added activity logging for task moves in `activity_logs`.
